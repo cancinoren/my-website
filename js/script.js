@@ -194,6 +194,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Gallery Navigation - Carousel Feature
+const galleryGrid = document.querySelector('.gallery-grid');
+const galleryPrev = document.querySelector('.gallery-prev');
+const galleryNext = document.querySelector('.gallery-next');
+
+if (galleryGrid && galleryPrev && galleryNext) {
+    const scrollAmount = 240; // Width of one item + gap
+    
+    galleryPrev.addEventListener('click', () => {
+        galleryGrid.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+        });
+    });
+
+    galleryNext.addEventListener('click', () => {
+        galleryGrid.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+    });
+}
+
 // Certification Modal Functionality
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('certModal');
@@ -273,5 +296,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.style.overflow = 'auto';
             }
         });
+    }
+});
+
+// Gallery Modal
+const galleryItems = document.querySelectorAll('.gallery-item');
+const galleryModal = document.createElement('div');
+galleryModal.id = 'galleryModal';
+galleryModal.className = 'modal';
+galleryModal.innerHTML = `
+    <div class="modal-content gallery-modal-content">
+        <span class="modal-close">&times;</span>
+        <div class="modal-body gallery-modal-body">
+            <img id="galleryModalImage" src="" alt="Gallery Image" class="modal-image">
+        </div>
+    </div>
+`;
+document.body.appendChild(galleryModal);
+
+galleryItems.forEach((item) => {
+    item.addEventListener('click', function() {
+        const imgSrc = this.querySelector('img').src;
+        const imgAlt = this.querySelector('img').alt;
+        document.getElementById('galleryModalImage').src = imgSrc;
+        document.getElementById('galleryModalImage').alt = imgAlt;
+        galleryModal.classList.add('active');
+    });
+});
+
+// Close gallery modal
+const closeGalleryModal = galleryModal.querySelector('.modal-close');
+closeGalleryModal.addEventListener('click', function() {
+    galleryModal.classList.remove('active');
+});
+
+galleryModal.addEventListener('click', function(e) {
+    if (e.target === galleryModal) {
+        galleryModal.classList.remove('active');
     }
 });
