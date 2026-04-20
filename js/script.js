@@ -82,26 +82,26 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('loaded');
 });
 
-// Header sticky behavior
-let lastScrollTop = 0;
-const header = document.querySelector('.profile-header');
+// // Header sticky behavior
+// let lastScrollTop = 0;
+// const header = document.querySelector('.profile-header');
 
-if (header) {
-    window.addEventListener('scroll', () => {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+// if (header) {
+//     window.addEventListener('scroll', () => {
+//         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
-        if (scrollTop > lastScrollTop) {
-            // Scrolling Down
-            header.style.transform = 'translateY(-100%)';
-        } else {
-            // Scrolling Up
-            header.style.transform = 'translateY(0)';
-        }
+//         if (scrollTop > lastScrollTop) {
+//             // Scrolling Down
+//             header.style.transform = 'translateY(-100%)';
+//         } else {
+//             // Scrolling Up
+//             header.style.transform = 'translateY(0)';
+//         }
         
-        header.style.transition = 'transform 0.3s ease';
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-    });
-}
+//         header.style.transition = 'transform 0.3s ease';
+//         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+//     });
+// }
 
 // Gallery image lazy loading
 const images = document.querySelectorAll('.gallery-item img');
