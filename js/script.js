@@ -1,3 +1,13 @@
+// Google Analytics Tracking Function
+function trackButtonClick(buttonName) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'click', {
+            event_category: 'button',
+            event_label: buttonName
+        });
+    }
+}
+
 // Smooth scroll behavior for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -12,10 +22,22 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Button interactions
+// Button interactions with analytics tracking
 const buttons = document.querySelectorAll('.btn');
 buttons.forEach(button => {
     button.addEventListener('click', function(e) {
+        // Track specific buttons
+        const href = this.getAttribute('href');
+        const buttonText = this.textContent.trim();
+        
+        if (href === 'https://www.linkedin.com/in/renatocancino') {
+            trackButtonClick('LinkedIn Button');
+        } else if (href && href.startsWith('mailto:')) {
+            trackButtonClick('Send Email Button');
+        } else if (href && href.includes('resume') && href.includes('.pdf')) {
+            trackButtonClick('Download Resume Button');
+        }
+        
         // Add ripple effect
         const ripple = document.createElement('span');
         const rect = this.getBoundingClientRect();
