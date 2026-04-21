@@ -31,11 +31,27 @@ buttons.forEach(button => {
         const buttonText = this.textContent.trim();
         
         if (href === 'https://www.linkedin.com/in/renatocancino') {
-            trackButtonClick('LinkedIn Button');
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'linkedin_click', {
+                    event_category: 'engagement',
+                    event_label: 'LinkedIn Profile Visit'
+                });
+            }
         } else if (href && href.startsWith('mailto:')) {
-            trackButtonClick('Send Email Button');
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'send_email_click', {
+                    event_category: 'engagement',
+                    event_label: 'Send Email Button'
+                });
+            }
         } else if (href && href.includes('resume') && href.includes('.pdf')) {
-            trackButtonClick('Download Resume Button');
+            // Track resume download with detailed engagement metrics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'resume_download', {
+                    event_category: 'engagement',
+                    event_label: 'Resume PDF Download'
+                });
+            }
         }
         
         // Add ripple effect
