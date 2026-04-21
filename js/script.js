@@ -163,6 +163,45 @@ document.querySelectorAll('.btn, .project-link, .social-link').forEach(element =
     });
 });
 
+// Social Links Analytics Tracking
+const socialLinks = document.querySelectorAll('.social-link');
+socialLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        const text = this.textContent.trim();
+        
+        if (text === 'LinkedIn') {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'social_media_click', {
+                    event_category: 'engagement',
+                    event_label: 'LinkedIn Social Link'
+                });
+            }
+        } else if (text === 'GitHub') {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'social_media_click', {
+                    event_category: 'engagement',
+                    event_label: 'GitHub Social Link'
+                });
+            }
+        } else if (text === 'Instagram') {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'social_media_click', {
+                    event_category: 'engagement',
+                    event_label: 'Instagram Social Link'
+                });
+            }
+        } else if (text === 'Viber') {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'social_media_click', {
+                    event_category: 'engagement',
+                    event_label: 'Viber Contact'
+                });
+            }
+        }
+    });
+});
+
 // Theme toggle (optional - for dark mode if needed)
 const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
 
