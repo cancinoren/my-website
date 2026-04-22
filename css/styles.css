@@ -551,7 +551,7 @@ html, body {
 
 /* Gallery */
 .gallery-section {
-    padding: 60px 0;
+    padding: 10px 0;
     background: var(--bg-light);
 }
 
@@ -646,7 +646,7 @@ html, body {
 
 @media (max-width: 480px) {
     .gallery-item {
-        flex: 0 0 calc(50% - 10px);
+        flex: 0 0 100%;
         min-width: 100px;
     }
     
@@ -659,8 +659,8 @@ html, body {
 .footer-section {
     background: white;
     border-top: 1px solid var(--border-color);
-    padding: 60px 0;
-    margin-top: 60px;
+    padding: 20px 0;
+    margin-top: 50px;
 }
 
 .footer-content {
@@ -720,10 +720,52 @@ html, body {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive Design */
+/* Responsive Design mobile*/
 @media (max-width: 768px) {
     .content-wrapper {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .left-column {
+        display: contents;
+    }
+
+    .right-column {
+        display: contents;
+    }
+
+    .about-section {
+        order: 1;
+    }
+
+    .experience-section {
+        order: 2;
+    }
+
+    .tech-stack-section {
+        order: 3;
+    }
+
+    .projects-section {
+        order: 4;
+    }
+
+    .certifications-section {
+        order: 5;
+    }
+
+    .featured-card {
+        order: 6;
+    }
+
+    .services-card {
+        order: 7;
+    }
+
+    .recommendations-section {
+        order: 8;
     }
 
     .profile-content {
