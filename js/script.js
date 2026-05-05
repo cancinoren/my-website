@@ -415,9 +415,18 @@ galleryModal.addEventListener('click', function(e) {
 
 // ===== CONTACT FORM HANDLER (Simple & Reliable with reCAPTCHA) =====
 
-// Rate limiting - prevent spam
-let lastSubmitTime = 0;
+// Rate limiting using localStorage - survives page refresh
 const SUBMIT_COOLDOWN = 10000; // 10 seconds
+const RATE_LIMIT_KEY = 'lastContactFormSubmit';
+
+function getLastSubmitTime() {
+    const stored = localStorage.getItem(RATE_LIMIT_KEY);
+    return stored ? parseInt(stored) : 0;
+}
+
+function setLastSubmitTime(time) {
+    localStorage.setItem(RATE_LIMIT_KEY, time.toString());
+}
 
 // Helper function to show status modal
 function showStatusModal(title, message, isSuccess = true) {
@@ -451,10 +460,12 @@ document.addEventListener('DOMContentLoaded', function() {
         contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Rate limiting check
+            // Rate limiting check (using localStorage)
             const now = Date.now();
-            if (now - lastSubmitTime < SUBMIT_COOLDOWN) {
-                const secondsLeft = Math.ceil((SUBMIT_COOLDOWN - (now - lastSubmitTime)) / 1000);
+            const lastSubmit = getLastSubmitTime();
+            
+            if (now - lastSubmit < SUBMIT_COOLDOWN) {
+                const secondsLeft = Math.ceil((SUBMIT_COOLDOWN - (now - lastSubmit)) / 1000);
                 showStatusModal('Please Wait', `You can send another message in ${secondsLeft} seconds.`, false);
                 return;
             }
@@ -494,8 +505,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.warn('reCAPTCHA not loaded');
                 }
                 
-                // Mark submit time for rate limiting
-                lastSubmitTime = now;
+                // Mark submit time for rate limiting (BEFORE submit)
+                setLastSubmitTime(now);
                 
                 // Track event
                 if (typeof gtag !== 'undefined') {
@@ -505,9 +516,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 }
                 
-                // Submit form (Formspree will validate reCAPTCHA on the backend)
+                // Submit form to Formspree
+                contactForm.submit();
+                
+                // Show success message after brief delay
                 setTimeout(() => {
-                    contactForm.submit();
                     showStatusModal('Message Sent!', 'Thank you! I will get back to you soon.', true);
                     contactForm.reset();
                     sendBtn.disabled = false;
