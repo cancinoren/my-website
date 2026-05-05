@@ -285,20 +285,21 @@
                 <!-- Contact -->
                 <div class="affiliations-group">
                     <h3 class="group-title">Get in touch</h3>
-                    <div class="contact-options">
+                    <form id="contactForm" class="contact-form" action="https://formspree.io/f/mgodkzko" method="POST">
                         <div class="contact-item">
-                            <input type="email" placeholder="Email" class="contact-input">
-                            <p class="contact-email">cancinorenato20@email.com</p>
+                            <input type="email" name="email" id="visitorEmail" placeholder="Your Email" class="contact-input" required>
+                            <p class="contact-email">cancinorenato20@gmail.com</p>
                         </div>
                         <div class="contact-item">
-                            <button class="btn btn-primary">Let's talk</button>
-                            <p class="contact-text">Schedule a Call</p>
+                            <textarea name="message" id="contactMessage" placeholder="Your Message" class="contact-textarea" rows="4" required></textarea>
                         </div>
+                        <!-- reCAPTCHA v3 token field (hidden) -->
+                        <input type="hidden" name="g-recaptcha-response" id="recaptchaToken">
                         <div class="contact-item">
-                            <button class="btn btn-secondary">Blog</button>
-                            <p class="contact-text">Read my blog</p>
+                            <button type="submit" class="btn btn-primary" id="sendBtn">Send</button>
+                            <p class="contact-text">I'll get back to you soon</p>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -375,6 +376,19 @@
         </div>
     </div>
 
-    <script src="js/script.js"></script>
+    <!-- Status Modal for Contact Form -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content status-modal">
+            <div class="modal-body">
+                <p id="statusMessage" class="status-message"></p>
+                <button class="btn btn-primary" onclick="document.getElementById('statusModal').classList.remove('active')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google reCAPTCHA v3 -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lfa8dksAAAAAE4stgZiYDtVGyNRi7VyNK4BJ29c"></script>
+    <!-- Simple Form Handling (No EmailJS needed!) -->
+    <script defer src="js/script.js"></script>
 </body>
 </html>

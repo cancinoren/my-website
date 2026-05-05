@@ -529,12 +529,41 @@ html, body {
     gap: 4px;
 }
 
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .contact-input {
     padding: 8px 12px;
     border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 13px;
     font-family: inherit;
+    transition: var(--transition);
+}
+
+.contact-input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.contact-textarea {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+    resize: vertical;
+    transition: var(--transition);
+}
+
+.contact-textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .contact-email {
@@ -1222,4 +1251,23 @@ html, body {
 #certModal .modal-close:hover {
     background: rgba(0, 0, 0, 0.1);
     color: #1a1a1a;
+}
+
+/* Status Modal Styles */
+.status-modal {
+    background-color: white !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+.status-modal .modal-body {
+    background-color: white !important;
+    gap: 20px;
+}
+
+.status-message {
+    font-size: 16px;
+    color: var(--text-dark);
+    text-align: center;
+    margin: 0;
+    padding: 20px 0;
 }

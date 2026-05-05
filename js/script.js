@@ -412,3 +412,129 @@ galleryModal.addEventListener('click', function(e) {
         galleryModal.classList.remove('active');
     }
 });
+
+// ===== CONTACT FORM HANDLER (Simple & Reliable with reCAPTCHA) =====
+
+// Rate limiting - prevent spam
+let lastSubmitTime = 0;
+const SUBMIT_COOLDOWN = 10000; // 10 seconds
+
+// Helper function to show status modal
+function showStatusModal(title, message, isSuccess = true) {
+    const statusModal = document.getElementById('statusModal');
+    const statusMessage = document.getElementById('statusMessage');
+    
+    if (isSuccess) {
+        statusMessage.innerHTML = `<strong>${title}</strong><p>${message}</p>`;
+        statusMessage.style.color = '#10b981';
+    } else {
+        statusMessage.innerHTML = `<strong>${title}</strong><p>${message}</p>`;
+        statusMessage.style.color = '#ef4444';
+    }
+    
+    statusModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Auto-close after 5 seconds
+    setTimeout(() => {
+        statusModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }, 5000);
+}
+
+// Contact form handler
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    const sendBtn = document.getElementById('sendBtn');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Rate limiting check
+            const now = Date.now();
+            if (now - lastSubmitTime < SUBMIT_COOLDOWN) {
+                const secondsLeft = Math.ceil((SUBMIT_COOLDOWN - (now - lastSubmitTime)) / 1000);
+                showStatusModal('Please Wait', `You can send another message in ${secondsLeft} seconds.`, false);
+                return;
+            }
+            
+            // Validate inputs before submitting
+            const visitorEmail = document.getElementById('visitorEmail').value.trim();
+            const contactMessage = document.getElementById('contactMessage').value.trim();
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(visitorEmail)) {
+                showStatusModal('Invalid Email', 'Please enter a valid email address.', false);
+                return;
+            }
+            
+            if (!contactMessage) {
+                showStatusModal('Message Required', 'Please enter your message.', false);
+                return;
+            }
+            
+            if (contactMessage.length < 10) {
+                showStatusModal('Message Too Short', 'Please enter at least 10 characters.', false);
+                return;
+            }
+            
+            // Show loading state
+            sendBtn.disabled = true;
+            const originalText = sendBtn.textContent;
+            sendBtn.textContent = 'Sending...';
+            
+            try {
+                // Get reCAPTCHA token
+                if (typeof grecaptcha !== 'undefined') {
+                    const token = await grecaptcha.execute('6Lfa8dksAAAAAE4stgZiYDtVGyNRi7VyNK4BJ29c', { action: 'submit' });
+                    document.getElementById('recaptchaToken').value = token;
+                } else {
+                    console.warn('reCAPTCHA not loaded');
+                }
+                
+                // Mark submit time for rate limiting
+                lastSubmitTime = now;
+                
+                // Track event
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'contact_form_submitted', {
+                        event_category: 'engagement',
+                        event_label: 'Contact Form Submission'
+                    });
+                }
+                
+                // Submit form (Formspree will validate reCAPTCHA on the backend)
+                setTimeout(() => {
+                    contactForm.submit();
+                    showStatusModal('Message Sent!', 'Thank you! I will get back to you soon.', true);
+                    contactForm.reset();
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = originalText;
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Form submission error:', error);
+                showStatusModal('Error', 'Failed to submit form. Please try again.', false);
+                sendBtn.disabled = false;
+                sendBtn.textContent = originalText;
+            }
+        });
+        
+        // Email validation on blur
+        const emailInput = document.getElementById('visitorEmail');
+        if (emailInput) {
+            emailInput.addEventListener('blur', function() {
+                const email = this.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (email && !emailRegex.test(email)) {
+                    this.style.borderColor = '#ef4444';
+                } else {
+                    this.style.borderColor = '';
+                }
+            });
+        }
+    }
+});
